@@ -11,7 +11,8 @@ def parse():
         return jsonify({"error": "No ingredient provided"}), 400
     parsed = parse_ingredient(ingredient_line)
     # Convert to dict for JSON
-    return jsonify(parsed.to_dict())
+    return jsonify(vars(parsed))
+
 
 if __name__ == '__main__':
     app.run()
