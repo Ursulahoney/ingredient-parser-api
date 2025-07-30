@@ -4,11 +4,14 @@ from fractions import Fraction
 
 app = Flask(__name__)
 
-def clean_for_json(obj):
+def convert(obj):
+    """
+    Recursively convert all Fraction objects to float in any data structure.
+    """
     if isinstance(obj, dict):
-        return {k: clean_for_json(v) for k, v in obj.items()}
+        return {k: convert(v) for k, v in obj.items()}
     elif isinstance(obj, list):
-        return [clean_for_json(i) for i in obj]
+        return [convert(i) for i in obj]
     elif isinstance(obj, Fraction):
         return float(obj)
     else:
@@ -21,4 +24,6 @@ def parse():
     if not ingredient_line:
         return jsonify({"error": "No ingredient provided"}), 400
     parsed = parse_ingredient(ingredient_line)
-    return jsonify(clean_for_json(vars(parsed)))
+    parsed_dict = vars(parsed)
+    clean_dict = convert(parsed_dict)
+    return jsonify(clean_dict)
