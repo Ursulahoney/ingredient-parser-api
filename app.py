@@ -21,5 +21,4 @@ def parse():
     if not ingredient_line:
         return jsonify({"error": "No ingredient provided"}), 400
     parsed = parse_ingredient(ingredient_line)
-    # Use vars(parsed) to get a dict, then clean_for_json to convert Fractions
     return jsonify(clean_for_json(vars(parsed)))
